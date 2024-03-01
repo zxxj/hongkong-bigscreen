@@ -3,6 +3,7 @@
     <div class="header">SMART &nbsp;&nbsp;&nbsp;&nbsp;CLASSROOM PLATFORM - DASHBOARD</div>
 
     <div class="content">
+      <!-- left -->
       <div class="left">
         <div class="top">
           <div class="l">
@@ -81,11 +82,51 @@
               </div>
             </div>
           </div>
-          <div class="r">??</div>
+
+          <!-- center -->
+          <div class="r">
+            <div class="center-chart-box">
+              <div class="center-chart">
+                <div class="center-header">
+                  <div class="header-left">
+                    <div class="icon">
+                      <img src="../assets/images/overview/帮助.png" style="width: 40px" />
+                    </div>
+                    <div class="text">Enegy Cosumption and CO2 Emission</div>
+                  </div>
+                  <div class="header-right">
+                    <div class="more">
+                      <img src="../assets/images/overview/更多.png" alt="" style="width: 40px" />
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="chart"
+                  ref="centerChartRef"
+                  style="width: 100%; height: calc(100% - 71px)"
+                ></div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="bottom">222</div>
       </div>
-      <div class="right">2</div>
+
+      <!-- right -->
+      <div class="right">
+        <div class="right-header">
+          <div class="icon">
+            <img src="../assets/images/overview/绿叶.png" style="width: 40px" alt="" />
+          </div>
+          <div class="text">Energy Consumption by Builiding</div>
+          <div class="more">
+            <img src="../assets/images/overview/更多.png" style="width: 40px" alt="" />
+          </div>
+        </div>
+
+        <div class="days">Last 30 days</div>
+      </div>
     </div>
   </div>
 </template>
@@ -98,11 +139,14 @@ onMounted(() => {
   classroomChart()
   IntensityChart()
   Occupancy()
+  centerChart()
 })
 
 const classroomChartRef = ref()
 const IntensityChartRef = ref()
 const OccupancyRef = ref()
+const centerChartRef = ref()
+
 function classroomChart() {
   // 折线图
   var chart = echarts.init(classroomChartRef.value)
@@ -316,6 +360,194 @@ function Occupancy() {
   }
   chart.setOption(option)
 }
+
+function centerChart() {
+  const Data = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  const sjlData = [200, 250, 370, 150, 350, 110, 200, 250]
+  const bjlData = [150, 140, 300, 350, 110, 200, 250, 370, 150, 400, 200, 100, 200, 300]
+  const balData = [40, 30, 55, 30, 30, 33, 22, 66, 44, 22, 11, 30]
+  const bjl2Data = [70, 70, 70, 70, 70, 65, 55, 70, 70, 70, 50, 80]
+
+  var chart = echarts.init(centerChartRef.value)
+  var option = {
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: 'rgba(13,5,30,.6)',
+      borderWidth: 1,
+      borderColor: '#4ddd8f',
+      padding: 5,
+      textStyle: {
+        color: '#fff'
+      }
+    },
+    legend: {
+      itemWidth: 20,
+      itemHeight: 15,
+      top: 60,
+      left: 40,
+      icon: 'rect',
+      textStyle: {
+        color: '#c7d3e5'
+      }
+    },
+    grid: {
+      top: '25%',
+      left: '5%',
+      right: '5%',
+      bottom: '5%',
+      containLabel: true
+    },
+    xAxis: [
+      {
+        type: 'category',
+        data: Data,
+        axisPointer: {
+          type: 'shadow'
+        },
+        axisTick: {
+          show: true,
+          length: 4,
+          lineStyle: {
+            color: 'rgba(199,211,229,0.5)'
+          }
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: 'rgba(199,211,229,0.5)'
+          }
+        },
+        axisLabel: {
+          color: '#c7d3e5'
+        }
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value',
+        max: 500,
+        nameTextStyle: {
+          color: '#c7d3e5'
+        },
+        axisLabel: {
+          color: '#c7d3e5'
+        },
+        axisTick: {
+          show: true,
+          length: 4,
+          lineStyle: {
+            color: 'rgba(64,136,254,1)'
+          }
+        },
+        splitLine: {
+          show: true,
+          lineStyle: {
+            color: 'rgba(199,211,229,0.3)',
+            width: 1,
+            type: 'dashed'
+          }
+        }
+      },
+      {
+        type: 'value',
+        scale: true,
+        splitLine: {
+          show: true,
+          lineStyle: {
+            type: 'dashed',
+            color: 'rgba(199,211,229,0.3)'
+          }
+        },
+        max: 100,
+        min: 0,
+        axisLabel: {
+          formatter: '{value}%', //右侧以百分比进行展示
+          show: true,
+          textStyle: {
+            color: '#c7d3e5'
+          }
+        },
+        nameTextStyle: {
+          color: '#c7d3e5'
+        },
+        axisTick: {
+          show: true,
+          length: 4,
+          lineStyle: {
+            color: 'rgba(64,136,254,1)'
+          }
+        }
+      }
+    ],
+    series: [
+      {
+        name: 'Y on Y',
+        type: 'bar',
+        barWidth: 14,
+        data: sjlData,
+        itemStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: 'rgba(11, 160, 255, 1)'
+            },
+            {
+              offset: 1,
+              color: 'rgba(11, 160, 255, 0)'
+            }
+          ])
+        }
+      },
+      {
+        name: 'This Year',
+        type: 'bar',
+        barWidth: 30,
+        itemStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: 'rgba(245, 213, 39, 1)'
+            },
+            {
+              offset: 1,
+              color: 'rgba(245, 213, 39, 0)'
+            }
+          ])
+        },
+        data: bjlData
+      },
+      {
+        name: 'CO2',
+        type: 'line',
+        yAxisIndex: 1,
+        symbol: 'none',
+        data: balData,
+        itemStyle: {
+          color: '#2DF3E2'
+        },
+        lineStyle: {
+          type: 'dashed', // 可以改为'dotted'以使用点线样式
+          width: 3 // 线条宽度
+        }
+      },
+      {
+        name: 'Baseline',
+        type: 'line',
+        yAxisIndex: 1,
+        symbol: 'none',
+        data: bjl2Data,
+        itemStyle: {
+          color: '#885DFF'
+        },
+        lineStyle: {
+          type: 'dashed', // 可以改为'dotted'以使用点线样式
+          width: 3 // 线条宽度
+        }
+      }
+    ]
+  }
+  chart.setOption(option)
+}
 </script>
 
 <style lang="scss" scoped>
@@ -338,7 +570,7 @@ function Occupancy() {
     flex-direction: column;
     justify-content: space-between;
     flex: 1;
-    background-color: green;
+    // background-color: green;
 
     .top {
       display: flex;
@@ -348,7 +580,7 @@ function Occupancy() {
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        width: 400px;
+        width: 390px;
 
         .box {
           background: linear-gradient(to right top, #0086bf, #002564);
@@ -400,8 +632,8 @@ function Occupancy() {
               flex: 1;
 
               .right-bottom-box {
-                margin-right: 20px;
-                margin-top: 10px;
+                margin-right: 30px;
+                margin-top: 3px;
                 display: flex;
                 justify-content: flex-end;
 
@@ -422,6 +654,54 @@ function Occupancy() {
 
       .r {
         flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        // 中间
+        .center-chart-box {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 800px;
+          height: 540px;
+          background: url('../assets/images/overview/center-bg.png') no-repeat center center;
+          background-size: cover;
+
+          .center-chart {
+            width: 750px;
+            height: 500px;
+            background: linear-gradient(#008e97, #006593, #006571);
+
+            border-top-left-radius: 40px;
+            border-bottom-right-radius: 100px;
+            .center-header {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin: 20px 20px 20px 30px;
+
+              .header-left {
+                display: flex;
+                align-items: center;
+
+                .icon {
+                  margin-right: 20px;
+                }
+
+                .text {
+                  background-color: #009997;
+                  font-size: 25px;
+                  font-weight: bold;
+                  padding: 6px;
+                  box-shadow: 5px 2px 5px 0px rgba(221, 204, 204, 0.85);
+                  -webkit-box-shadow: 5px 2px 5px 0px rgba(0, 0, 0, 1);
+                  -moz-box-shadow: 5px 2px 5px 0px rgba(221, 204, 204, 0.685);
+                }
+              }
+            }
+          }
+        }
       }
     }
 
@@ -433,6 +713,32 @@ function Occupancy() {
   }
 
   .right {
+    padding: 20px 20px 20px 20px;
+    border-top-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    .right-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .text {
+        margin: 0 0 0 15px;
+        font-size: 25px;
+        font-weight: bold;
+      }
+    }
+
+    .days {
+      margin: 0 auto;
+      margin-top: 20px;
+      width: 200px;
+      height: 50px;
+      background-color: #13517e;
+      border-radius: 10px;
+      text-align: center;
+      line-height: 50px;
+      font-size: 18px;
+    }
     width: 400px;
     background-color: red;
   }

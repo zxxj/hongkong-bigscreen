@@ -34,7 +34,7 @@
             </div>
             <div class="all-classrooms box">
               <div class="title">
-                <img src="../assets/images/overview/地球.png" alt="" class="icon" />
+                <img src="../assets/images/overview/帮助.png" alt="" class="icon" />
                 <div class="text" style="margin-left: -119px">Energy Usage Intensity</div>
                 <img src="../assets/images/overview/更多.png" alt="" class="more" />
               </div>
@@ -59,7 +59,7 @@
             </div>
             <div class="all-classrooms box">
               <div class="title" style="justify-content: flex-start">
-                <img src="../assets/images/overview/地球.png" alt="" class="icon" />
+                <img src="../assets/images/overview/双人.png" alt="" class="icon" />
                 <div class="text" style="margin-left: 20px">Classroom Occupancy</div>
               </div>
 
@@ -110,7 +110,27 @@
             </div>
           </div>
         </div>
-        <div class="bottom">222</div>
+        <div class="bottom">
+          <div class="header-header">
+            <div class="icon">
+              <img src="../assets/images/overview/bottom-header.png" alt="" />
+            </div>
+            <div class="text">Operation Alerts</div>
+          </div>
+
+          <div class="list">
+            <div class="item" v-for="item in bottomList" :key="item">
+              <div class="count">{{ item.count }}</div>
+              <div class="center">
+                <div class="icon">
+                  <img src="../assets/images/overview/list-icon.png" alt="" />
+                </div>
+                <div class="text">{{ item.text }}</div>
+              </div>
+              <div class="days">{{ item.days }}</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- right -->
@@ -126,6 +146,25 @@
         </div>
 
         <div class="days">Last 30 days</div>
+
+        <div
+          class="chart-text"
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            margin-bottom: -10px;
+          "
+        >
+          <div class="building">building</div>
+          <div class="average" style="color: yellow">Average</div>
+          <div class="2000">
+            2.000
+            <p>Kwh</p>
+          </div>
+        </div>
+        <div ref="buildingChartRef" style="width: 100%; height: 500px"></div>
       </div>
     </div>
   </div>
@@ -140,12 +179,14 @@ onMounted(() => {
   IntensityChart()
   Occupancy()
   centerChart()
+  buildingChart()
 })
 
 const classroomChartRef = ref()
 const IntensityChartRef = ref()
 const OccupancyRef = ref()
 const centerChartRef = ref()
+const buildingChartRef = ref()
 
 function classroomChart() {
   // 折线图
@@ -548,6 +589,144 @@ function centerChart() {
   }
   chart.setOption(option)
 }
+
+function buildingChart() {
+  var chart = echarts.init(buildingChartRef.value)
+  var option = {
+    xAxis: {
+      // type: 'value',
+      axisTick: {
+        show: false
+      },
+      axisLabel: {
+        show: false,
+        fontSize: 8
+      },
+      splitLine: {
+        show: false
+      }
+    },
+    yAxis: {
+      type: 'category',
+      inverse: true,
+      namGap: 50,
+      axisTick: {
+        show: false
+      },
+      nameTextStyle: {
+        color: '#d890e6'
+      },
+      axisLine: {
+        lineStyle: {
+          color: '#00b4a7',
+          width: 2 //这里是为了突出显示加上的
+        }
+      },
+      data: [
+        'Z',
+        'Y',
+        'W',
+        'VA',
+        'VS',
+        'V',
+        'X',
+        'M',
+        'TU',
+        'ST',
+        'RQ',
+        'TU',
+        'QT',
+        'PQ',
+        'OP',
+        'HJ',
+        'GH',
+        'FG',
+        'FJ',
+        'EF',
+        'CF',
+        'CD',
+        'BC',
+        'AG'
+      ]
+    },
+    tooltip: {
+      trigger: 'axis'
+    },
+    grid: {
+      left: '5%',
+      top: '5%',
+      right: '10%',
+      bottom: '0%',
+      containLabel: true
+    },
+    series: [
+      {
+        data: [
+          1100, 2200, 1842, 1623, 1254, 3330, 1213, 2363, 1534, 1231, 1245, 336, 3456, 3163, 2432,
+          441, 141, 424, 2525, 3124, 545, 2342, 331, 333
+        ],
+        // name: '1',
+        type: 'bar',
+        barWidth: '15',
+        label: {
+          show: false,
+          position: 'right',
+          color: '#d890e6'
+        },
+        itemStyle: {
+          normal: {
+            show: true,
+            color: function () {
+              return {
+                type: 'linear',
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: `#d890e6`
+                  },
+                  {
+                    offset: 1,
+                    color: '#62B0E9'
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+
+  chart.setOption(option)
+}
+
+const bottomList = ref([
+  {
+    count: 56,
+    text: 'Total Alarm',
+    days: 'Last 30 days'
+  },
+  {
+    count: 14,
+    text: 'Equipment Fault',
+    days: 'Last 30 days'
+  },
+  {
+    count: 51,
+    text: 'Alarm Resumed',
+    days: 'Last 30 days'
+  },
+  {
+    count: 20,
+    text: 'Other Alarm',
+    days: 'Last 30 days'
+  },
+  {
+    count: 4,
+    text: 'System Offline',
+    days: 'Last 30 days'
+  }
+])
 </script>
 
 <style lang="scss" scoped>
@@ -706,13 +885,61 @@ function centerChart() {
     }
 
     .bottom {
-      height: 25%;
+      margin-right: 10px;
+      height: 27%;
       background: url(../assets/images/overview/left-bottom.png) center center no-repeat;
       background-size: cover;
+      .header-header {
+        display: flex;
+        align-items: center;
+        margin: 10px;
+
+        .text {
+          padding: 3px 30px 3px 3px;
+          box-shadow: 3px 3px 3px 0px rgba(241, 230, 230, 0.75);
+          -webkit-box-shadow: 3px 3px 3px 0px rgba(241, 230, 230, 0.75);
+          -moz-box-shadow: 5px 5px 5px 0px rgba(241, 230, 230, 0.75);
+        }
+      }
+
+      .list {
+        display: flex;
+        padding: 0 20px 5px 20px;
+        .item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 240px;
+          height: 120px;
+          background: url('../assets/images/overview/bottom-border.png') no-repeat center center;
+          background-size: contain;
+
+          .count {
+            font-size: 30px;
+            color: yellow;
+            font-weight: bold;
+          }
+
+          .center {
+            display: flex;
+            margin: 4px 0;
+            .text {
+              font-size: 18px;
+            }
+          }
+
+          .days {
+            background-color: #203864;
+            padding: 6px 15px;
+          }
+        }
+      }
     }
   }
 
   .right {
+    margin-right: 10px;
     padding: 20px 20px 20px 20px;
     border-top-left-radius: 40px;
     border-bottom-right-radius: 40px;
@@ -740,7 +967,7 @@ function centerChart() {
       font-size: 18px;
     }
     width: 400px;
-    background-color: red;
+    background: linear-gradient(to left top, #00a2e2, #002060);
   }
 }
 </style>

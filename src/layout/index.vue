@@ -41,9 +41,11 @@
 <script setup>
 import { h, ref } from 'vue'
 import { ReadOutlined, PicLeftOutlined, HomeOutlined } from '@ant-design/icons-vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
+const route = useRoute()
+console.log(route.path)
 
 const defaultPath = localStorage.getItem('menuPath') || 'overview'
 
@@ -159,19 +161,21 @@ const siderStyle = {
   }
 }
 
-.ant-layout-content {
+:deep(.ant-layout-content) {
   text-align: unset !important;
-  padding-left: 10px;
+  padding-left: 10px !important;
   line-height: unset !important;
+  height: calc(100vh - 64px - 68px) !important;
 }
 
-.ant-menu {
+:deep(.ant-menu) {
   width: 100% !important;
+  background: transparent !important;
 }
 
-:where(.css-dev-only-do-not-override-1hsjdkk).ant-menu-light {
-  background: unset;
-}
+// :deep(.ant-menu) {
+// background: red !important;
+// }
 
 :deep(.ant-menu-title-content) {
   font-size: 20px;
